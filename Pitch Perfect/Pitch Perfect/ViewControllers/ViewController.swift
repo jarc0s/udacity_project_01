@@ -34,16 +34,15 @@ class RecordSoundsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "stopRecording" {
             if let playSoundViewController = segue.destination as? PlaySoundsViewController, let recordedAudioUrl = sender as? URL  {
-                playSoundViewController.recordedAudioUrl = recordedAudioUrl
+                playSoundViewController.recordedAudioURL = recordedAudioUrl
             }
             
         }
     }
 
     @IBAction func recordAudio(_ sender: UIButton) {
-        recordingLabel.text = "Recording in Progress"
-        stopRecordingButton.isEnabled = true
-        recordButton.isEnabled = false
+        
+        updateLabelRecordStatus(isRecord: true)
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
         let recordingName = "recordedVoice.wav"
@@ -63,14 +62,37 @@ class RecordSoundsViewController: UIViewController {
     }
     
     @IBAction func stopRecording(_ sender: UIButton) {
-        recordingLabel.text = "Tap to record"
-        stopRecordingButton.isEnabled = false
-        recordButton.isEnabled = true
+        updateLabelRecordStatus(isRecord: false)
         
         audioRecorder.stop()
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(false)
     }
+    
+    /**
+     Update the UI labels and buttons is the current state is recording an audio
+     - Author:
+     JArcos
+     - returns:
+     NO return for this function
+     - throws:
+     No Exception
+     - parameters:
+        - isRecord: Bool who indicate if the current state is recording
+     - Important:
+     The current tag string is set by default
+     - Version:
+     0.1
+     
+     */
+    func updateLabelRecordStatus(isRecord : Bool){
+        recordingLabel.text = isRecord ? "Recording in Progress" : "Tap to record"
+        stopRecordingButton.isEnabled = isRecord
+        recordButton.isEnabled = !isRecord
+        
+        
+    }
+    
 }
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {

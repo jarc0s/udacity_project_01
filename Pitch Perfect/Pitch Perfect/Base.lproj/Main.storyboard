@@ -148,8 +148,8 @@
                             <button opaque="NO" tag="6" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HgM-Lm-qpm">
                                 <rect key="frame" x="155.5" y="595" width="64" height="64"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="HgM-Lm-qpm" secondAttribute="height" multiplier="1:1" id="CdP-8f-Zmw"/>
                                     <constraint firstAttribute="height" constant="64" id="Ff2-f2-rgR"/>
-                                    <constraint firstAttribute="width" constant="64" id="Syg-n0-mUD"/>
                                 </constraints>
                                 <state key="normal" title="Button" image="Stop"/>
                                 <connections>

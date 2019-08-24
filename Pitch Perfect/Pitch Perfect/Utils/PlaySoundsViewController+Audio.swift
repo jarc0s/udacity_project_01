@@ -35,8 +35,11 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
     
     func setupAudio() {
         // initialize (recording) audio file
+        guard let _recordedAudioURL = recordedAudioURL else {
+            return
+        }
         do {
-            audioFile? = try AVAudioFile(forReading: recordedAudioURL as URL)
+            audioFile = try AVAudioFile(forReading: _recordedAudioURL as URL)
         } catch {
             showAlert(Alerts.AudioFileError, message: String(describing: error))
         }
@@ -49,7 +52,10 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
         
         // node for playing audio
         audioPlayerNode = AVAudioPlayerNode()
-        audioEngine.attach(audioPlayerNode)
+        guard let _audioEngine = audioEngine, let _audioPlayerNode = audioPlayerNode else {
+            return
+        }
+        _audioEngine.attach(_audioPlayerNode)
         
         // node for adjusting rate/pitch
         let changeRatePitchNode = AVAudioUnitTimePitch()
@@ -59,42 +65,46 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
         if let rate = rate {
             changeRatePitchNode.rate = rate
         }
-        audioEngine.attach(changeRatePitchNode)
+        _audioEngine.attach(changeRatePitchNode)
         
         // node for echo
         let echoNode = AVAudioUnitDistortion()
         echoNode.loadFactoryPreset(.multiEcho1)
-        audioEngine.attach(echoNode)
+        _audioEngine.attach(echoNode)
         
         // node for reverb
         let reverbNode = AVAudioUnitReverb()
         reverbNode.loadFactoryPreset(.cathedral)
         reverbNode.wetDryMix = 50
-        audioEngine.attach(reverbNode)
+        _audioEngine.attach(reverbNode)
         
         // connect nodes
         if echo == true && reverb == true {
-            connectAudioNodes(audioPlayerNode, changeRatePitchNode, echoNode, reverbNode, audioEngine.outputNode)
+            connectAudioNodes(_audioPlayerNode, changeRatePitchNode, echoNode, reverbNode, _audioEngine.outputNode)
         } else if echo == true {
-            connectAudioNodes(audioPlayerNode, changeRatePitchNode, echoNode, audioEngine.outputNode)
+            connectAudioNodes(_audioPlayerNode, changeRatePitchNode, echoNode, _audioEngine.outputNode)
         } else if reverb == true {
-            connectAudioNodes(audioPlayerNode, changeRatePitchNode, reverbNode, audioEngine.outputNode)
+            connectAudioNodes(_audioPlayerNode, changeRatePitchNode, reverbNode, _audioEngine.outputNode)
         } else {
-            connectAudioNodes(audioPlayerNode, changeRatePitchNode, audioEngine.outputNode)
+            connectAudioNodes(_audioPlayerNode, changeRatePitchNode, _audioEngine.outputNode)
         }
         
+        
+        guard let _audioFile = audioFile else {
+            return
+        }
         // schedule to play and start the engine!
-        audioPlayerNode.stop()
-        audioPlayerNode.scheduleFile(audioFile, at: nil) {
+        _audioPlayerNode.stop()
+        _audioPlayerNode.scheduleFile(_audioFile, at: nil) {
             
             var delayInSeconds: Double = 0
             
-            if let lastRenderTime = self.audioPlayerNode.lastRenderTime, let playerTime = self.audioPlayerNode.playerTime(forNodeTime: lastRenderTime) {
+            if let lastRenderTime = _audioPlayerNode.lastRenderTime, let playerTime = _audioPlayerNode.playerTime(forNodeTime: lastRenderTime) {
                 
                 if let rate = rate {
-                    delayInSeconds = Double(self.audioFile.length - playerTime.sampleTime) / Double(self.audioFile.processingFormat.sampleRate) / Double(rate)
+                    delayInSeconds = Double(_audioFile.length - playerTime.sampleTime) / Double(_audioFile.processingFormat.sampleRate) / Double(rate)
                 } else {
-                    delayInSeconds = Double(self.audioFile.length - playerTime.sampleTime) / Double(self.audioFile.processingFormat.sampleRate)
+                    delayInSeconds = Double(_audioFile.length - playerTime.sampleTime) / Double(_audioFile.processingFormat.sampleRate)
                 }
             }
             
@@ -104,14 +114,14 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
         }
         
         do {
-            try audioEngine.start()
+            try _audioEngine.start()
         } catch {
             showAlert(Alerts.AudioEngineError, message: String(describing: error))
             return
         }
         
         // play the recording!
-        audioPlayerNode.play()
+        _audioPlayerNode.play()
     }
     
     @objc func stopAudio() {
@@ -135,8 +145,13 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
     // MARK: Connect List of Audio Nodes
     
     func connectAudioNodes(_ nodes: AVAudioNode...) {
+        guard let _audioEngine = audioEngine, let _audioFile = audioFile else {
+            return
+        }
+        
         for x in 0..<nodes.count-1 {
-            audioEngine.connect(nodes[x], to: nodes[x+1], format: audioFile.processingFormat)
+            _audioEngine.connect(nodes[x], to: nodes[x+1], format: _audioFile.processingFormat)
+            
         }
     }
     

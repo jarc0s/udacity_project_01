@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Constants {
+public struct Constants {
     
     struct LabelsRecordScreen {
         static let recording = "Recording in Progress"

@@ -16,7 +16,7 @@ class RecordSoundsViewController: UIViewController {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var stopRecordingButton: UIButton!
     
-    var audioRecorder  : AVAudioRecorder!
+    var audioRecorder: AVAudioRecorder!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,8 +81,8 @@ class RecordSoundsViewController: UIViewController {
      0.1
      
      */
-    func updateLabelRecordStatus(isRecord : Bool){
-        recordingLabel.text = isRecord ? Constants.LabelsRecordScreen.recording : Constants.LabelsRecordScreen.notRecording
+    func updateLabelRecordStatus(isRecord: Bool){
+        recordingLabel.text = isRecord ? Constants.LabelsRecordScreen.recording: Constants.LabelsRecordScreen.notRecording
         stopRecordingButton.isEnabled = isRecord
         recordButton.isEnabled = !isRecord
         
@@ -91,7 +91,7 @@ class RecordSoundsViewController: UIViewController {
     
 }
 
-extension RecordSoundsViewController : AVAudioRecorderDelegate {
+extension RecordSoundsViewController: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
             performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)

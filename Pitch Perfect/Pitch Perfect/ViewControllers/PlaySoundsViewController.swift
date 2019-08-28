@@ -20,10 +20,10 @@ class PlaySoundsViewController: UIViewController {
     @IBOutlet weak var reverbButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
     
-    var recordedAudioURL : URL?
-    var audioFile : AVAudioFile?
-    var audioEngine : AVAudioEngine?
-    var audioPlayerNode : AVAudioPlayerNode?
+    var recordedAudioURL: URL?
+    var audioFile: AVAudioFile?
+    var audioEngine: AVAudioEngine?
+    var audioPlayerNode: AVAudioPlayerNode?
     var stopTimer: Timer!
     
     enum ButtonType: Int {
@@ -33,7 +33,7 @@ class PlaySoundsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudio()
-        self.title = "Select an option"
+        title = "Select an option"
     }
     
     override func viewWillAppear(_ animated: Bool) {

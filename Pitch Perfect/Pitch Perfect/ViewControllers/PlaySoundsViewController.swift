@@ -33,6 +33,7 @@ class PlaySoundsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudio()
+        self.title = "Select an option"
     }
     
     override func viewWillAppear(_ animated: Bool) {

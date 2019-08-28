@@ -18,12 +18,9 @@ class RecordSoundsViewController: UIViewController {
     
     var audioRecorder  : AVAudioRecorder!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        stopRecordingButton.isEnabled = false
+        updateLabelRecordStatus(isRecord: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,11 +42,10 @@ class RecordSoundsViewController: UIViewController {
         updateLabelRecordStatus(isRecord: true)
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
-        let recordingName = "recordedVoice.wav"
+        let recordingName = Constants.AudioFile.fileName
         let pathArray = [dirPath, recordingName]
         let stringPath = pathArray.joined(separator: "/")
         let filePath = URL(string: stringPath)
-        print(filePath ?? "")
         
         let session = AVAudioSession.sharedInstance()
         try! session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
@@ -86,7 +82,7 @@ class RecordSoundsViewController: UIViewController {
      
      */
     func updateLabelRecordStatus(isRecord : Bool){
-        recordingLabel.text = isRecord ? "Recording in Progress" : "Tap to record"
+        recordingLabel.text = isRecord ? Constants.LabelsRecordScreen.recording : Constants.LabelsRecordScreen.notRecording
         stopRecordingButton.isEnabled = isRecord
         recordButton.isEnabled = !isRecord
         
@@ -97,7 +93,6 @@ class RecordSoundsViewController: UIViewController {
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        print("finished recording")
         if flag {
             performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
         }else {

@@ -23,11 +23,6 @@ class RecordSoundsViewController: UIViewController {
         updateLabelRecordStatus(isRecord: false)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "stopRecording" {
             if let playSoundViewController = segue.destination as? PlaySoundsViewController, let recordedAudioUrl = sender as? URL  {
@@ -85,8 +80,6 @@ class RecordSoundsViewController: UIViewController {
         recordingLabel.text = isRecord ? Constants.LabelsRecordScreen.recording: Constants.LabelsRecordScreen.notRecording
         stopRecordingButton.isEnabled = isRecord
         recordButton.isEnabled = !isRecord
-        
-        
     }
     
 }

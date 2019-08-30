@@ -39,7 +39,7 @@ class RecordSoundsViewController: UIViewController {
 
     @IBAction func recordAudio(_ sender: UIButton) {
         
-        updateLabelRecordStatus(isRecord: true)
+        /*updateLabelRecordStatus(isRecord: true)
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
         let recordingName = Constants.AudioFile.fileName
@@ -54,7 +54,8 @@ class RecordSoundsViewController: UIViewController {
         audioRecorder.delegate = self
         audioRecorder.isMeteringEnabled = true
         audioRecorder.prepareToRecord()
-        audioRecorder.record()
+        audioRecorder.record()*/
+        performSegue(withIdentifier: "stopRecording", sender: "")
     }
     
     @IBAction func stopRecording(_ sender: UIButton) {

@@ -23,11 +23,6 @@ class RecordSoundsViewController: UIViewController {
         updateLabelRecordStatus(isRecord: false)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "stopRecording" {
             if let playSoundViewController = segue.destination as? PlaySoundsViewController, let recordedAudioUrl = sender as? URL  {
@@ -39,7 +34,7 @@ class RecordSoundsViewController: UIViewController {
 
     @IBAction func recordAudio(_ sender: UIButton) {
         
-        /*updateLabelRecordStatus(isRecord: true)
+        updateLabelRecordStatus(isRecord: true)
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
         let recordingName = Constants.AudioFile.fileName
@@ -54,8 +49,7 @@ class RecordSoundsViewController: UIViewController {
         audioRecorder.delegate = self
         audioRecorder.isMeteringEnabled = true
         audioRecorder.prepareToRecord()
-        audioRecorder.record()*/
-        performSegue(withIdentifier: "stopRecording", sender: "")
+        audioRecorder.record()
     }
     
     @IBAction func stopRecording(_ sender: UIButton) {
@@ -86,8 +80,6 @@ class RecordSoundsViewController: UIViewController {
         recordingLabel.text = isRecord ? Constants.LabelsRecordScreen.recording: Constants.LabelsRecordScreen.notRecording
         stopRecordingButton.isEnabled = isRecord
         recordButton.isEnabled = !isRecord
-        
-        
     }
     
 }

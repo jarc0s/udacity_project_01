@@ -33,7 +33,7 @@ class PlaySoundsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudio()
-        setContentModeImageButton(contentView: self.view)
+        setContentModeImageButtonAndEnable(contentView: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,24 +66,16 @@ class PlaySoundsViewController: UIViewController {
     }
     
     
-    func setContentModeImageButton( contentView : UIView ) {
+    func setContentModeImageButtonAndEnable( contentView: UIView, enable: Bool? = nil ) {
         for currentView in contentView.subviews {
             if let button = currentView as? UIButton {
                 button.imageView?.contentMode = .scaleAspectFit
+                if let enable = enable {
+                    button.isEnabled = enable
+                }
             }else if currentView.subviews.count > 0 {
-                setContentModeImageButton(contentView: currentView)
+                setContentModeImageButtonAndEnable(contentView: currentView, enable: enable)
             }
         }
     }
-    
-    func setEnableButton( contentView : UIView, enabled : Bool ) {
-        for currentView in contentView.subviews {
-            if let button = currentView as? UIButton {
-                button.isEnabled = enabled
-            }else if currentView.subviews.count > 0 {
-                setEnableButton(contentView: currentView, enabled : enabled)
-            }
-        }
-    }
-    
 }
